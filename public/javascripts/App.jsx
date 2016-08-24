@@ -1,4 +1,9 @@
-import React from 'react'; 
+import React from 'react';
+import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router'
+
+import Viewer from './screens/viewer';
+import Nav from './screens/nav';
+import History from './screens/history';
 
 var App = React.createClass({
   getInitialState: function () {
@@ -9,7 +14,12 @@ var App = React.createClass({
 
   render: function () {
     return(
-      <div><p>hello</p></div>
+      <Router history={hashHistory}>
+        <Route path='/' component={Nav}>
+          <IndexRoute component={Viewer}/>
+          <Route path='/history' component={History}/>
+        </Route>
+      </Router>
     )
   }
 })
