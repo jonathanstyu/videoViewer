@@ -1,5 +1,5 @@
 import React from 'react';
-import MovieCard from './movieCard';
+import MovieCard from './MovieCard';
 import _ from 'lodash';
 
 var MovieCardCollection = React.createClass({

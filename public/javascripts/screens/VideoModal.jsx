@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {updateHistory} from '../actions'
+import Movie from '../movie'
 
 var VideoModal = React.createClass({
   playVideo(event) {
@@ -34,12 +35,10 @@ var VideoModal = React.createClass({
 })
 
 const mapStateToProps = (state) => {
-  var currentlyWatchingMovie = _.find(state.movies, function (movie) {
-    return movie.id === state.currentlyWatching
-  })
+  var movie = typeof state.currentlyWatching !== 'undefined' ? state.currentlyWatching : new Movie()
   return {
     modalOpen: state.modalOpen,
-    movie: currentlyWatchingMovie || ""
+    movie: state.currentlyWatching
   }
 }
 

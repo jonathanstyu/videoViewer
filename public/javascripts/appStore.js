@@ -28,15 +28,16 @@ var videoApp = function (state, action) {
     case "OPEN_MOVIE_MODAL":
       return Object.assign({}, state, {
         modalOpen: true,
-        currentlyWatching: action.id
+        currentlyWatching: action.movie
       });
       break;
     case "UPDATE_HISTORY_SUCCESS":
       return Object.assign({}, state);
       break;
+
     case "RECEIVE_HISTORY_SUCCESS":
       return Object.assign({}, state, {
-        history: state.history
+        history: action.history
       })
       break;
     default:

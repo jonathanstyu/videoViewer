@@ -2,9 +2,9 @@ import React from 'react';
 import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router'
 import {Provider} from 'react-redux';
 
-import Viewer from './screens/viewer';
-import Nav from './screens/nav';
-import History from './screens/history';
+import Viewer from './screens/Viewer';
+import Nav from './screens/Nav';
+import History from './screens/History';
 
 import store from './appStore';
 

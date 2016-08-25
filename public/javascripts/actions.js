@@ -45,9 +45,12 @@ export function getHistory() {
         return response.json()
       }
     }).then(function (json) {
-      dispatch(receiveHistory(json))
+      var parsedMovieHistory = json.map(function (data) {
+        return Movie.serializeFromMovieTemplate(data.entry);
+      })
+      dispatch(receiveHistory(parsedMovieHistory))
     }).catch(function (error) {
-      dispatch({type: "ERROR"})
+      dispatch({type: "ERROR", message: error.message})
     })
   }
 }

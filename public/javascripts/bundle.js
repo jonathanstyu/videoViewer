@@ -21390,19 +21390,19 @@
 
 	var _reactRedux = __webpack_require__(236);
 
-	var _viewer = __webpack_require__(257);
+	var _Viewer = __webpack_require__(257);
 
-	var _viewer2 = _interopRequireDefault(_viewer);
+	var _Viewer2 = _interopRequireDefault(_Viewer);
 
-	var _nav = __webpack_require__(286);
+	var _Nav = __webpack_require__(286);
 
-	var _nav2 = _interopRequireDefault(_nav);
+	var _Nav2 = _interopRequireDefault(_Nav);
 
-	var _history = __webpack_require__(287);
+	var _History = __webpack_require__(287);
 
-	var _history2 = _interopRequireDefault(_history);
+	var _History2 = _interopRequireDefault(_History);
 
-	var _appStore = __webpack_require__(288);
+	var _appStore = __webpack_require__(289);
 
 	var _appStore2 = _interopRequireDefault(_appStore);
 
@@ -21420,9 +21420,9 @@
 	        { history: _reactRouter.hashHistory },
 	        _react2.default.createElement(
 	          _reactRouter.Route,
-	          { path: '/', component: _nav2.default },
-	          _react2.default.createElement(_reactRouter.IndexRoute, { component: _viewer2.default }),
-	          _react2.default.createElement(_reactRouter.Route, { path: '/history', component: _history2.default })
+	          { path: '/', component: _Nav2.default },
+	          _react2.default.createElement(_reactRouter.IndexRoute, { component: _Viewer2.default }),
+	          _react2.default.createElement(_reactRouter.Route, { path: '/history', component: _History2.default })
 	        )
 	      )
 	    );
@@ -28556,9 +28556,9 @@
 
 	var _actions = __webpack_require__(263);
 
-	var _modal = __webpack_require__(265);
+	var _VideoModal = __webpack_require__(265);
 
-	var _modal2 = _interopRequireDefault(_modal);
+	var _VideoModal2 = _interopRequireDefault(_VideoModal);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28580,7 +28580,7 @@
 	      ),
 	      _react2.default.createElement('hr', null),
 	      _react2.default.createElement(_MovieCardCollection2.default, { movies: this.props.movies }),
-	      _react2.default.createElement(_modal2.default, null)
+	      _react2.default.createElement(_VideoModal2.default, null)
 	    );
 	  }
 	});
@@ -29052,9 +29052,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _movieCard = __webpack_require__(260);
+	var _MovieCard = __webpack_require__(260);
 
-	var _movieCard2 = _interopRequireDefault(_movieCard);
+	var _MovieCard2 = _interopRequireDefault(_MovieCard);
 
 	var _lodash = __webpack_require__(261);
 
@@ -29066,7 +29066,7 @@
 	  displayName: 'MovieCardCollection',
 	  render: function render() {
 	    var movieCells = this.props.movies.map(function (movie) {
-	      return _react2.default.createElement(_movieCard2.default, { movie: movie });
+	      return _react2.default.createElement(_MovieCard2.default, { movie: movie });
 	    });
 	    var movieRows = _lodash2.default.chunk(movieCells, 3);
 	    var rowedCells = movieRows.map(function (chunk, chunkNum) {
@@ -29167,10 +29167,10 @@
 	  return {};
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 	  return {
 	    view: function view(event) {
-	      dispatch({ type: "OPEN_MOVIE_MODAL", id: event.target.id });
+	      dispatch({ type: "OPEN_MOVIE_MODAL", movie: ownProps.movie });
 	    },
 	    save: function save(event) {
 	      dispatch({ type: "SAVE_MOVIE", id: event.target.id });
@@ -46002,9 +46002,12 @@
 	        return response.json();
 	      }
 	    }).then(function (json) {
-	      dispatch(receiveHistory(json));
+	      var parsedMovieHistory = json.map(function (data) {
+	        return _movie2.default.serializeFromMovieTemplate(data.entry);
+	      });
+	      dispatch(receiveHistory(parsedMovieHistory));
 	    }).catch(function (error) {
-	      dispatch({ type: "ERROR" });
+	      dispatch({ type: "ERROR", message: error.message });
 	    });
 	  };
 	}
@@ -46040,7 +46043,7 @@
 	});
 	var Movie = function Movie(options) {
 	  if (options) {
-	    this.title = options.title, this.description = options.description, this.publishedDate = options.publishedDate, this.availableDate = options.availableDate, this.headerImage = options.images[0].url, this.videoURL = options.contents[0].url, this.id = options.id;
+	    this.title = options.title || "", this.description = options.description || "", this.publishedDate = options.publishedDate || "", this.availableDate = options.availableDate || "", this.headerImage = options.images ? options.images[0].url : "", this.videoURL = options.contents ? options.contents[0].url : "", this.id = options.id;
 	  } else {
 	    this.title = "";
 	    this.description = "";
@@ -46049,6 +46052,13 @@
 	    this.headerImage = "";
 	    this.videoURL = "", this.id = "";
 	  }
+	};
+
+	Movie.serializeFromMovieTemplate = function (movie) {
+	  var serializedMovie = new Movie(movie);
+	  serializedMovie.headerImage = movie.headerImage;
+	  serializedMovie.videoURL = movie.videoURL;
+	  return serializedMovie;
 	};
 
 	exports.default = Movie;
@@ -46078,6 +46088,10 @@
 	var _lodash2 = _interopRequireDefault(_lodash);
 
 	var _actions = __webpack_require__(263);
+
+	var _movie = __webpack_require__(264);
+
+	var _movie2 = _interopRequireDefault(_movie);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46128,12 +46142,10 @@
 	});
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  var currentlyWatchingMovie = _lodash2.default.find(state.movies, function (movie) {
-	    return movie.id === state.currentlyWatching;
-	  });
+	  var movie = typeof state.currentlyWatching !== 'undefined' ? state.currentlyWatching : new _movie2.default();
 	  return {
 	    modalOpen: state.modalOpen,
-	    movie: currentlyWatchingMovie || ""
+	    movie: state.currentlyWatching
 	  };
 	};
 
@@ -48157,9 +48169,17 @@
 
 	var _reactRedux = __webpack_require__(236);
 
-	var _movieCard = __webpack_require__(260);
+	var _MovieCard = __webpack_require__(260);
 
-	var _movieCard2 = _interopRequireDefault(_movieCard);
+	var _MovieCard2 = _interopRequireDefault(_MovieCard);
+
+	var _VideoModal = __webpack_require__(265);
+
+	var _VideoModal2 = _interopRequireDefault(_VideoModal);
+
+	var _HistoryTableRow = __webpack_require__(288);
+
+	var _HistoryTableRow2 = _interopRequireDefault(_HistoryTableRow);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48170,7 +48190,7 @@
 	  },
 	  render: function render() {
 	    var content;
-	    if (this.props.history.length === 0) {
+	    if (this.props.movieHistory.length === 0) {
 	      content = _react2.default.createElement(
 	        'div',
 	        { className: 'centered' },
@@ -48186,14 +48206,42 @@
 	        ),
 	        _react2.default.createElement(
 	          'a',
-	          { href: '/', className: 'btn empty-action' },
+	          { href: '/#/', className: 'btn empty-action' },
 	          'Go to Views'
 	        )
 	      );
 	    } else {
-	      content = this.props.history.map(function (movie) {
-	        _react2.default.createElement(_movieCard2.default, { movie: movie });
-	      });
+	      var boundView = this.props.view;
+	      content = _react2.default.createElement(
+	        'table',
+	        { className: 'table' },
+	        _react2.default.createElement(
+	          'tbody',
+	          null,
+	          _react2.default.createElement(
+	            'tr',
+	            null,
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Movie Title'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Movie Description'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Actions'
+	            )
+	          ),
+	          this.props.movieHistory.map(function (movie, index) {
+	            return _react2.default.createElement(_HistoryTableRow2.default, { movie: movie, key: index });
+	          })
+	        )
+	      );
 	    }
 	    return _react2.default.createElement(
 	      'div',
@@ -48204,18 +48252,19 @@
 	        'History'
 	      ),
 	      _react2.default.createElement('hr', null),
-	      content
+	      content,
+	      _react2.default.createElement(_VideoModal2.default, null)
 	    );
 	  }
 	});
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    history: state.history
+	    movieHistory: state.history
 	  };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 	  return {
 	    dispatch: dispatch
 	  };
@@ -48233,13 +48282,77 @@
 	  value: true
 	});
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _actions = __webpack_require__(263);
+
+	var _reactRedux = __webpack_require__(236);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var HistoryTableRow = _react2.default.createClass({
+	  displayName: 'HistoryTableRow',
+	  render: function render() {
+	    var movie = this.props.movie;
+	    return _react2.default.createElement(
+	      'tr',
+	      null,
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        movie.title
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        movie.description
+	      ),
+	      _react2.default.createElement(
+	        'td',
+	        null,
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'btn', onClick: this.props.view },
+	          'Watch'
+	        )
+	      )
+	    );
+	  }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    view: function view(event) {
+	      dispatch({ type: "OPEN_MOVIE_MODAL", movie: ownProps.movie });
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryTableRow);
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _redux = __webpack_require__(243);
 
-	var _reduxLogger = __webpack_require__(289);
+	var _reduxLogger = __webpack_require__(290);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxThunk = __webpack_require__(290);
+	var _reduxThunk = __webpack_require__(291);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -48271,15 +48384,16 @@
 	    case "OPEN_MOVIE_MODAL":
 	      return Object.assign({}, state, {
 	        modalOpen: true,
-	        currentlyWatching: action.id
+	        currentlyWatching: action.movie
 	      });
 	      break;
 	    case "UPDATE_HISTORY_SUCCESS":
 	      return Object.assign({}, state);
 	      break;
+
 	    case "RECEIVE_HISTORY_SUCCESS":
 	      return Object.assign({}, state, {
-	        history: state.history
+	        history: action.history
 	      });
 	      break;
 	    default:
@@ -48292,7 +48406,7 @@
 	exports.default = store;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48525,7 +48639,7 @@
 	module.exports = createLogger;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports) {
 
 	'use strict';

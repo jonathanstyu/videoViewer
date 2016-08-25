@@ -1,11 +1,11 @@
 var Movie = function (options) {
   if (options) {
-    this.title = options.title,
-    this.description = options.description,
-    this.publishedDate = options.publishedDate,
-    this.availableDate = options.availableDate,
-    this.headerImage = options.images[0].url,
-    this.videoURL = options.contents[0].url,
+    this.title = options.title || "",
+    this.description = options.description || "",
+    this.publishedDate = options.publishedDate || "",
+    this.availableDate = options.availableDate || "",
+    this.headerImage = options.images ? options.images[0].url : "",
+    this.videoURL = options.contents ? options.contents[0].url : "",
     this.id = options.id
   } else {
     this.title = ""
@@ -16,6 +16,13 @@ var Movie = function (options) {
     this.videoURL = "",
     this.id = ""
   }
+}
+
+Movie.serializeFromMovieTemplate = function (movie) {
+  var serializedMovie = new Movie(movie);
+  serializedMovie.headerImage = movie.headerImage;
+  serializedMovie.videoURL = movie.videoURL;
+  return serializedMovie; 
 }
 
 export default Movie;

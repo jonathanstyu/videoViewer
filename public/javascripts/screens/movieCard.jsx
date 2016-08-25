@@ -29,10 +29,10 @@ const mapStateToProps = (state) => {
   return {}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     view: (event) => {
-      dispatch({type: "OPEN_MOVIE_MODAL", id: event.target.id})
+      dispatch({type: "OPEN_MOVIE_MODAL", movie: ownProps.movie})
     },
     save: (event) => {
       dispatch({type: "SAVE_MOVIE", id: event.target.id})

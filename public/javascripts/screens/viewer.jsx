@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 import MovieCardCollection from './MovieCardCollection';
 import {connect} from 'react-redux';
 import {getMovies} from '../actions';
-import VideoModal from './modal';
+import VideoModal from './VideoModal';
 
 var Viewer = React.createClass({
   componentWillMount() {

@@ -1,23 +1,39 @@
 var express = require('express');
 var app = express();
+var pgp = require('pg-promise')();
 var bodyParser = require('body-parser');
+var db = pgp('postgres://localhost:5432/movies')
+
+// Express engine settings
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", 'html');
 app.set('views', './public');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
+// Serves the SPA
 app.get('/', function (req, res) {
   res.render('index.html', {})
 })
 
+// API actions
 app.get('/history', function (req, res) {
-  res.send([])
+  db.any("SELECT * FROM movies")
+    .then(function (data) {
+      res.send(data)
+    }).catch(function (error) {
+      console.log(error.message);
+    });
 })
 
 app.post('/history', function (req, res) {
-  console.log(req.body);
-  res.sendStatus(200)
+  db.none("INSERT into movies VALUES($1)", JSON.stringify(req.body))
+    .then(function () {
+      res.sendStatus(200)
+    })
+    .catch(function (error) {
+      console.log(error.message);
+    })
 })
 
 app.listen(3000, function () {
