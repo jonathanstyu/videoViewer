@@ -1,25 +1,24 @@
 import React from 'react';
 import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router'
+import {Provider} from 'react-redux';
 
 import Viewer from './screens/viewer';
 import Nav from './screens/nav';
 import History from './screens/history';
 
-var App = React.createClass({
-  getInitialState: function () {
-    return ({
-      hello: true
-    })
-  },
+import store from './appStore';
 
+var App = React.createClass({
   render: function () {
     return(
-      <Router history={hashHistory}>
-        <Route path='/' component={Nav}>
-          <IndexRoute component={Viewer}/>
-          <Route path='/history' component={History}/>
-        </Route>
-      </Router>
+      <Provider store={store}>
+        <Router history={hashHistory}>
+          <Route path='/' component={Nav}>
+            <IndexRoute component={Viewer}/>
+            <Route path='/history' component={History}/>
+          </Route>
+        </Router>
+      </Provider>
     )
   }
 })
