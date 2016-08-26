@@ -8,13 +8,9 @@ var MovieCard = React.createClass({
       <div className='panel panel-primary animated fadeIn horizontal-card'>
         <div className="panel-heading">
           <h4 className="panel-title">{movie.title}</h4>
-          <h6>{new Date(movie.publishedDate).toString()}</h6>
         </div>
         <div>
           <img src={movie.headerImage} onClick={this.props.view} style={styles.imageCard} />
-        </div>
-        <div className="panel-body">
-          <p>{movie.description}</p>
         </div>
       </div>
     )

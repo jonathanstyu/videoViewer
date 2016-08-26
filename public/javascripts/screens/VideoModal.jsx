@@ -29,6 +29,8 @@ var VideoModal = React.createClass({
             <source src={this.props.movie.videoURL}/>
             Your browser does not support video.
           </video>
+          <h6>Description:</h6>
+          <p>{this.props.movie.description}</p>
         </div>
       </Modal>
     )

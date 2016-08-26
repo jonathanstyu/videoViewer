@@ -29093,26 +29093,12 @@
 	          'h4',
 	          { className: 'panel-title' },
 	          movie.title
-	        ),
-	        _react2.default.createElement(
-	          'h6',
-	          null,
-	          new Date(movie.publishedDate).toString()
 	        )
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement('img', { src: movie.headerImage, onClick: this.props.view, style: styles.imageCard })
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'panel-body' },
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          movie.description
-	        )
 	      )
 	    );
 	  }
@@ -46097,6 +46083,16 @@
 	          { type: 'video/mp4', controls: true, onPlay: this.playVideo, style: styles.video },
 	          _react2.default.createElement('source', { src: this.props.movie.videoURL }),
 	          'Your browser does not support video.'
+	        ),
+	        _react2.default.createElement(
+	          'h6',
+	          null,
+	          'Description:'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          this.props.movie.description
 	        )
 	      )
 	    );

@@ -22,7 +22,7 @@ export default StyleSheet.create({
         "marginRight": 10,
         "display": "inline-block",
         "verticalAlign": "top",
-        "width": "33%",
+        "width": "25%",
         "whiteSpace": "initial"
     }
 });
