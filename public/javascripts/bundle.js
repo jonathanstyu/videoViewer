@@ -28548,10 +28548,6 @@
 
 	__webpack_require__(258);
 
-	var _MovieCardCollection = __webpack_require__(259);
-
-	var _MovieCardCollection2 = _interopRequireDefault(_MovieCardCollection);
-
 	var _reactRedux = __webpack_require__(236);
 
 	var _actions = __webpack_require__(263);
@@ -28559,6 +28555,10 @@
 	var _VideoModal = __webpack_require__(265);
 
 	var _VideoModal2 = _interopRequireDefault(_VideoModal);
+
+	var _MovieCard = __webpack_require__(260);
+
+	var _MovieCard2 = _interopRequireDefault(_MovieCard);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28569,26 +28569,48 @@
 	      this.props.dispatch((0, _actions.getMovies)());
 	    }
 	  },
+	  handleKeyPress: function handleKeyPress(event) {
+	    console.log(event.keyCode);
+	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'container-fluid' },
 	      _react2.default.createElement(
 	        'h3',
 	        null,
 	        'Viewer'
 	      ),
 	      _react2.default.createElement('hr', null),
-	      _react2.default.createElement(_MovieCardCollection2.default, { movies: this.props.movies }),
+	      _react2.default.createElement(
+	        'div',
+	        { id: 'carousel-horizontal' },
+	        this.props.movies.map(function (movie, index) {
+	          return _react2.default.createElement(_MovieCard2.default, { movie: movie, key: index });
+	        })
+	      ),
 	      _react2.default.createElement(_VideoModal2.default, null)
 	    );
 	  }
 	});
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    movies: state.movies
-	  };
+	  if (state.searchString === "") {
+	    return {
+	      movies: state.allMovies
+	    };
+	  } else {
+	    var filteredMovies = state.allMovies.filter(function (movie) {
+	      if (movie.title.toLowerCase().indexOf(state.searchString) >= 0 || movie.description.toLowerCase().indexOf(state.searchString) >= 0) {
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    });
+	    return {
+	      movies: filteredMovies
+	    };
+	  }
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -29039,60 +29061,7 @@
 
 
 /***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _MovieCard = __webpack_require__(260);
-
-	var _MovieCard2 = _interopRequireDefault(_MovieCard);
-
-	var _lodash = __webpack_require__(261);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var MovieCardCollection = _react2.default.createClass({
-	  displayName: 'MovieCardCollection',
-	  render: function render() {
-	    var movieCells = this.props.movies.map(function (movie) {
-	      return _react2.default.createElement(_MovieCard2.default, { movie: movie });
-	    });
-	    var movieRows = _lodash2.default.chunk(movieCells, 3);
-	    var rowedCells = movieRows.map(function (chunk, chunkNum) {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'columns', key: chunkNum },
-	        chunk.map(function (row, index) {
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'column col-md-4', key: index },
-	            row
-	          );
-	        })
-	      );
-	    });
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'container' },
-	      rowedCells
-	    );
-	  }
-	});
-
-	exports.default = MovieCardCollection;
-
-/***/ },
+/* 259 */,
 /* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -29116,52 +29085,44 @@
 	    var movie = this.props.movie;
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'card' },
+	      { className: 'panel panel-primary animated fadeIn horizontal-card' },
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'card-image' },
-	        _react2.default.createElement('img', { src: movie.headerImage, className: 'img-responsive' })
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'card-header' },
+	        { className: 'panel-heading' },
 	        _react2.default.createElement(
 	          'h4',
-	          { className: 'card-title' },
+	          { className: 'panel-title' },
 	          movie.title
 	        ),
 	        _react2.default.createElement(
 	          'h6',
-	          { className: 'card-meta' },
+	          null,
 	          new Date(movie.publishedDate).toString()
 	        )
 	      ),
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'card-body' },
-	        movie.description
+	        null,
+	        _react2.default.createElement('img', { src: movie.headerImage, onClick: this.props.view, style: styles.imageCard })
 	      ),
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'card-footer' },
+	        { className: 'panel-body' },
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'btn-group' },
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-primary', id: movie.id, onClick: this.props.view },
-	            'View'
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { className: 'btn btn-primary', id: movie.id, onClick: this.props.save },
-	            'Save'
-	          )
+	          'p',
+	          null,
+	          movie.description
 	        )
 	      )
 	    );
 	  }
 	});
+
+	var styles = {
+	  imageCard: {
+	    width: "100%"
+	  }
+	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {};
@@ -46105,7 +46066,8 @@
 	      _reactModal2.default,
 	      {
 	        isOpen: this.props.modalOpen,
-	        onRequestClose: this.props.closeModal
+	        onRequestClose: this.props.closeModal,
+	        onKeyDown: this.key
 	      },
 	      _react2.default.createElement(
 	        'div',
@@ -46132,7 +46094,7 @@
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
 	          'video',
-	          { type: 'video/mp4', controls: true, onPlay: this.playVideo },
+	          { type: 'video/mp4', controls: true, onPlay: this.playVideo, style: styles.video },
 	          _react2.default.createElement('source', { src: this.props.movie.videoURL }),
 	          'Your browser does not support video.'
 	        )
@@ -46140,6 +46102,12 @@
 	    );
 	  }
 	});
+
+	var styles = {
+	  video: {
+	    width: '100%'
+	  }
+	};
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  var movie = typeof state.currentlyWatching !== 'undefined' ? state.currentlyWatching : new _movie2.default();
@@ -48114,6 +48082,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(236);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Nav = _react2.default.createClass({
@@ -48123,33 +48093,66 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(
-	        'header',
-	        { className: 'navbar' },
+	        'nav',
+	        { className: 'navbar navbar-default' },
 	        _react2.default.createElement(
-	          'section',
-	          { className: 'navbar-section' },
+	          'div',
+	          { className: 'container-fluid' },
 	          _react2.default.createElement(
-	            'a',
-	            { href: '#', className: 'navbar-brand' },
-	            'VideoViewer'
+	            'div',
+	            { className: 'navbar-header' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '#/', className: 'navbar-brand' },
+	              'VideoViewer'
+	            )
 	          ),
 	          _react2.default.createElement(
-	            'a',
-	            { href: '#/history', className: 'btn btn-link' },
-	            'History'
+	            'ul',
+	            { className: 'nav navbar-nav' },
+	            _react2.default.createElement(
+	              'li',
+	              null,
+	              _react2.default.createElement(
+	                'a',
+	                { href: '#/history' },
+	                'History'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'form',
+	            { className: 'navbar-form navbar-right' },
+	            _react2.default.createElement(
+	              'div',
+	              null,
+	              _react2.default.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search Title / Description', onChange: this.props.updateSearchString })
+	            )
 	          )
 	        )
 	      ),
 	      _react2.default.createElement(
 	        'div',
-	        { className: 'container' },
+	        { className: 'row' },
 	        this.props.children
 	      )
 	    );
 	  }
 	});
 
-	exports.default = Nav;
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    updateSearchString: function updateSearchString(event) {
+	      dispatch({ type: "UPDATE_SEARCH_STRING", value: event.target.value });
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Nav);
 
 /***/ },
 /* 287 */
@@ -48361,17 +48364,18 @@
 	var videoApp = function videoApp(state, action) {
 	  if (typeof state === 'undefined') {
 	    return {
-	      movies: [],
+	      allMovies: [],
 	      lastRefreshed: undefined,
 	      modalOpen: false,
 	      currentlyWatching: "",
-	      history: []
+	      history: [],
+	      searchString: ""
 	    };
 	  }
 	  switch (action.type) {
 	    case "RECEIVE_MOVIES":
 	      return Object.assign({}, state, {
-	        movies: action.movies,
+	        allMovies: action.movies,
 	        lastRefreshed: action.receivedAt
 	      });
 	      break;
@@ -48381,12 +48385,14 @@
 	        currentlyWatching: ""
 	      });
 	      break;
+
 	    case "OPEN_MOVIE_MODAL":
 	      return Object.assign({}, state, {
 	        modalOpen: true,
 	        currentlyWatching: action.movie
 	      });
 	      break;
+
 	    case "UPDATE_HISTORY_SUCCESS":
 	      return Object.assign({}, state);
 	      break;
@@ -48394,6 +48400,13 @@
 	    case "RECEIVE_HISTORY_SUCCESS":
 	      return Object.assign({}, state, {
 	        history: action.history
+	      });
+	      break;
+
+	    case "UPDATE_SEARCH_STRING":
+	      var searchS = typeof action.value === 'undefined' ? "" : action.value;
+	      return Object.assign({}, state, {
+	        searchString: searchS
 	      });
 	      break;
 	    default:

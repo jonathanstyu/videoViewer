@@ -5,17 +5,18 @@ import thunkMiddleware from 'redux-thunk';
 var videoApp = function (state, action) {
   if (typeof state === 'undefined') {
     return {
-      movies: [],
+      allMovies: [],
       lastRefreshed: undefined,
       modalOpen: false,
       currentlyWatching: "",
-      history: []
+      history: [],
+      searchString: ""
     }
   }
   switch (action.type) {
     case "RECEIVE_MOVIES":
       return Object.assign({}, state, {
-        movies: action.movies,
+        allMovies: action.movies,
         lastRefreshed: action.receivedAt
       });
       break;
@@ -25,12 +26,14 @@ var videoApp = function (state, action) {
         currentlyWatching: ""
       })
       break;
+
     case "OPEN_MOVIE_MODAL":
       return Object.assign({}, state, {
         modalOpen: true,
         currentlyWatching: action.movie
       });
       break;
+
     case "UPDATE_HISTORY_SUCCESS":
       return Object.assign({}, state);
       break;
@@ -38,6 +41,13 @@ var videoApp = function (state, action) {
     case "RECEIVE_HISTORY_SUCCESS":
       return Object.assign({}, state, {
         history: action.history
+      })
+      break;
+
+    case "UPDATE_SEARCH_STRING":
+      var searchS = typeof action.value === 'undefined' ? "" : action.value;
+      return Object.assign({}, state, {
+        searchString: searchS
       })
       break;
     default:

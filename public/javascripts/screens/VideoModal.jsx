@@ -15,6 +15,7 @@ var VideoModal = React.createClass({
       <Modal
         isOpen={this.props.modalOpen}
         onRequestClose={this.props.closeModal}
+        onKeyDown={this.key}
         >
         <div>
           <header className='navbar'>
@@ -24,7 +25,7 @@ var VideoModal = React.createClass({
             </section>
           </header>
           <hr />
-          <video type='video/mp4' controls onPlay={this.playVideo}>
+          <video type='video/mp4' controls onPlay={this.playVideo} style={styles.video}>
             <source src={this.props.movie.videoURL}/>
             Your browser does not support video.
           </video>
@@ -33,6 +34,12 @@ var VideoModal = React.createClass({
     )
   }
 })
+
+const styles = {
+  video: {
+    width: '100%'
+  }
+}
 
 const mapStateToProps = (state) => {
   var movie = typeof state.currentlyWatching !== 'undefined' ? state.currentlyWatching : new Movie()

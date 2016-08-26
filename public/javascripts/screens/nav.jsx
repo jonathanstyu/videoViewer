@@ -1,16 +1,26 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 var Nav = React.createClass({
   render() {
     return (
       <div>
-        <header className='navbar'>
-          <section className='navbar-section'>
-            <a href='#' className='navbar-brand'>VideoViewer</a>
-            <a href='#/history' className='btn btn-link'>History</a>
-          </section>
-        </header>
-        <div className='container'>
+        <nav className='navbar navbar-default'>
+          <div className='container-fluid'>
+            <div className='navbar-header'>
+              <a href='#/' className='navbar-brand'>VideoViewer</a>
+            </div>
+            <ul className='nav navbar-nav'>
+              <li><a href='#/history'>History</a></li>
+            </ul>
+            <form className='navbar-form navbar-right'>
+              <div>
+                <input type='text' className='form-control' placeholder='Search Title / Description' onChange={this.props.updateSearchString} />
+              </div>
+            </form>
+          </div>
+        </nav>
+        <div className='row'>
           {this.props.children}
         </div>
       </div>
@@ -18,4 +28,16 @@ var Nav = React.createClass({
   }
 })
 
-export default Nav;
+const mapStateToProps = (state) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateSearchString: (event) => {
+      dispatch({type: "UPDATE_SEARCH_STRING", value: event.target.value})
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);

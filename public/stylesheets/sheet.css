@@ -1,5 +1,35 @@
-@import './spectre.css'; 
+@import './animate.css';
+
+@grid-float-breakpoint: 768px;
 
 body {
   padding: 10px;
+}
+
+#carousel-horizontal {
+  overflow-y: hidden;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+#carousel-horizontal div.horizontal-card {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: top;
+  width: 33%;
+  white-space: initial;
+}
+
+@media only screen and (max-device-width: 1024px) {
+  body {
+    padding: 0px;
+  }
+
+  #carousel-horizontal div.horizontal-card {
+    width: 80%;
+    height: 75%;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 }

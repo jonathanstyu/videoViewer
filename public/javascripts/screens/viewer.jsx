@@ -1,9 +1,9 @@
 import React from 'react';
 import 'whatwg-fetch';
-import MovieCardCollection from './MovieCardCollection';
 import {connect} from 'react-redux';
 import {getMovies} from '../actions';
 import VideoModal from './VideoModal';
+import MovieCard from './MovieCard';
 
 var Viewer = React.createClass({
   componentWillMount() {
@@ -12,12 +12,22 @@ var Viewer = React.createClass({
     }
   },
 
+  handleKeyPress(event) {
+    console.log(event.keyCode);
+  },
+
   render() {
     return (
-      <div>
+      <div className='container-fluid'>
         <h3>Viewer</h3>
         <hr/>
-        <MovieCardCollection movies={this.props.movies}/>
+        <div id='carousel-horizontal'>
+          {
+            this.props.movies.map(function (movie, index) {
+              return <MovieCard movie={movie} key={index}/>
+            })
+          }
+        </div>
         <VideoModal />
       </div>
     )
@@ -25,8 +35,21 @@ var Viewer = React.createClass({
 })
 
 const mapStateToProps = (state) => {
-  return {
-    movies: state.movies
+  if (state.searchString === "") {
+    return {
+      movies: state.allMovies
+    }
+  } else {
+    var filteredMovies = state.allMovies.filter(function (movie) {
+      if (movie.title.toLowerCase().indexOf(state.searchString) >= 0 || movie.description.toLowerCase().indexOf(state.searchString) >= 0) {
+        return true
+      } else {
+        return false
+      }
+    })
+    return {
+      movies: filteredMovies
+    }
   }
 }
 
