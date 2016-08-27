@@ -11,6 +11,46 @@ var VideoModal = React.createClass({
   },
 
   render() {
+    var that = this;
+    var categories;
+    if (this.props.movie.categories) {
+      categories = (
+        <div className='row'>
+          <h4>
+            {
+              this.props.movie.categories.map(function (category, index) {
+                return (<span className="label label-primary"  key={index} onClick={that.props.selectCategory} id={category.title}>{category.title}</span>)
+              })
+            }
+          </h4>
+        </div>
+      )
+    }
+
+    var credits;
+    if (this.props.movie.credits) {
+      credits = (
+        <table className='table'>
+          <tbody>
+            <tr>
+              <th>Role</th>
+              <th>Name</th>
+            </tr>
+            {
+              this.props.movie.credits.map(function (credit, index) {
+                return(
+                  <tr key={index}>
+                    <td>{credit.role === "Director" ? "Director" : "Actor"}</td>
+                    <td><a onClick={that.props.selectCredit} id={credit.name}>{credit.name}</a></td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </table>
+      )
+    }
+
     return (
       <Modal
         isOpen={this.props.modalOpen}
@@ -29,8 +69,13 @@ var VideoModal = React.createClass({
             <source src={this.props.movie.videoURL}/>
             Your browser does not support video.
           </video>
-          <h6>Description:</h6>
-          <p>{this.props.movie.description}</p>
+          <div className='container-fluid'>
+            <h6>Description:</h6>
+            <p>{this.props.movie.description}</p>
+            {categories}
+            <hr/>
+            {credits}
+          </div>
         </div>
       </Modal>
     )
@@ -46,7 +91,7 @@ const styles = {
 const mapStateToProps = (state) => {
   var movie = typeof state.currentlyWatching !== 'undefined' ? state.currentlyWatching : new Movie()
   return {
-    modalOpen: state.modalOpen,
+    modalOpen: state.videoModalOpen,
     movie: state.currentlyWatching
   }
 }
@@ -55,6 +100,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
     closeModal: () => {
       dispatch({type: "CLOSE_VIDEO_MODAL"})
+    },
+    selectCredit: (event) => {
+      dispatch({type: "SELECT_CREDIT", value: event.target.id})
+    },
+    selectCategory: (event) => {
+      dispatch({type: "SELECT_CATEGORY", value: event.target.id})
     },
     dispatch: dispatch
   }

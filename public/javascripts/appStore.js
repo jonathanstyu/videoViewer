@@ -7,7 +7,10 @@ var videoApp = function (state, action) {
     return {
       allMovies: [],
       lastRefreshed: undefined,
-      modalOpen: false,
+      videoModalOpen: false,
+      tableModalOpen: false,
+      tabling: "",
+      tablingType: "",
       currentlyWatching: "",
       history: [],
       searchString: ""
@@ -22,15 +25,39 @@ var videoApp = function (state, action) {
       break;
     case "CLOSE_VIDEO_MODAL":
       return Object.assign({}, state, {
-        modalOpen: false,
+        videoModalOpen: false,
         currentlyWatching: ""
       })
       break;
 
     case "OPEN_MOVIE_MODAL":
       return Object.assign({}, state, {
-        modalOpen: true,
+        videoModalOpen: true,
         currentlyWatching: action.movie
+      });
+      break;
+
+    case "CLOSE_TABLE_MODAL":
+      return Object.assign({}, state, {
+        tableModalOpen: false,
+        tabling: "",
+        tablingType: ""
+      })
+      break;
+
+    case "SELECT_CREDIT":
+      return Object.assign({}, state, {
+        tableModalOpen: true,
+        tabling: action.value,
+        tablingType: "credits"
+      });
+      break;
+
+    case "SELECT_CATEGORY":
+      return Object.assign({}, state, {
+        tableModalOpen: true,
+        tabling: action.value,
+        tablingType: "categories"
       });
       break;
 

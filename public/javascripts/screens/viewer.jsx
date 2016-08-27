@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 import {connect} from 'react-redux';
 import {getMovies} from '../actions';
 import VideoModal from './VideoModal';
+import TableModal from './TableModal';
 import MovieCard from './MovieCard';
 
 var Viewer = React.createClass({
@@ -29,6 +30,7 @@ var Viewer = React.createClass({
           }
         </div>
         <VideoModal />
+        <TableModal />
       </div>
     )
   }
