@@ -46,15 +46,9 @@ var TableModal = React.createClass({
 
 const mapStateToProps = (state) => {
   var filteredMovies = [];
-  var variable;
-  if (typeof state.tablingType !== 'undefined') {
-    variable = 'categories';
-  } else {
-    variable = state.tablingType;
-  }
   for (var i = 0; i < state.allMovies.length; i++) {
-    for (var z = 0; z < state.allMovies[i][variable].length; z++) {
-      if (state.allMovies[i][variable][z].title === state.tabling) {
+    for (var z = 0; z < state.allMovies[i].categories.length; z++) {
+      if (state.allMovies[i].categories[z].title === state.tabling) {
         filteredMovies.push(state.allMovies[i])
       }
     }

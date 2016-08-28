@@ -41,7 +41,7 @@ var VideoModal = React.createClass({
                 return(
                   <tr key={index}>
                     <td>{credit.role === "Director" ? "Director" : "Actor"}</td>
-                    <td><a onClick={that.props.selectCredit} id={credit.name}>{credit.name}</a></td>
+                    <td>{credit.name}</td>
                   </tr>
                 )
               })
@@ -100,9 +100,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     closeModal: () => {
       dispatch({type: "CLOSE_VIDEO_MODAL"})
-    },
-    selectCredit: (event) => {
-      dispatch({type: "SELECT_CREDIT", value: event.target.id})
     },
     selectCategory: (event) => {
       dispatch({type: "SELECT_CATEGORY", value: event.target.id})

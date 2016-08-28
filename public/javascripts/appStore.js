@@ -45,14 +45,6 @@ var videoApp = function (state, action) {
       })
       break;
 
-    case "SELECT_CREDIT":
-      return Object.assign({}, state, {
-        tableModalOpen: true,
-        tabling: action.value,
-        tablingType: "credits"
-      });
-      break;
-
     case "SELECT_CATEGORY":
       return Object.assign({}, state, {
         tableModalOpen: true,
