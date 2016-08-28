@@ -2,12 +2,8 @@ var express = require('express');
 var app = express();
 var pgp = require('pg-promise')();
 var bodyParser = require('body-parser');
-var db;
-if (app.get('env') === 'development') {
-  db = pgp('postgres://localhost:5432/movies');
-} else {
-  db = pgp(process.env.DATABASE_URL);
-}
+pgp.pg.default.ssl = true; 
+var db = pgp(process.env.DATABASE_URL || 'postgres://localhost:5432/movies');
 
 // Express engine settings
 app.engine('html', require('ejs').renderFile);
