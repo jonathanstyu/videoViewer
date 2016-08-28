@@ -1,6 +1,6 @@
 ## VideoViewer, a React, Redux App
 
-![Screenshot]('./Screenshot.png')
+![Screenshot](Screenshot.png)
 
 Instructions on how to run this on your own.
 * Install the PostGres App and record its port

@@ -75,5 +75,5 @@ var videoApp = function (state, action) {
 }
 
 const logger = createLogger();
-var store = createStore(videoApp, applyMiddleware(thunkMiddleware, logger));
+var store = createStore(videoApp, applyMiddleware(thunkMiddleware));
 export default store;

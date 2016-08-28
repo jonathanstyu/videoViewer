@@ -48506,7 +48506,7 @@
 	};
 
 	var logger = (0, _reduxLogger2.default)();
-	var store = (0, _redux.createStore)(videoApp, (0, _redux.applyMiddleware)(_reduxThunk2.default, logger));
+	var store = (0, _redux.createStore)(videoApp, (0, _redux.applyMiddleware)(_reduxThunk2.default));
 	exports.default = store;
 
 /***/ },
